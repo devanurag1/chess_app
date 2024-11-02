@@ -1,39 +1,44 @@
+import 'package:chess/components/pieces.dart';
+import 'package:chess/values/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:chess_game/components/piece.dart'; // Assuming this is where the chess piece is defined
 
 class Square extends StatelessWidget {
-  const Square({
-    super.key,
-    required this.isWhite,
-    this.piece,
-    required this.isselcted,
-    required this.ontap,
-  });
-
+  final void Function()? onTap;
+  final bool isValidMove;
   final bool isWhite;
-  final chesspiece? piece;
-  final bool isselcted;
-  final void Function()? ontap;
+  final ChessPiece? piece;
+  final bool isSelected;
+  const Square(
+      {super.key,
+      required this.onTap,
+      required this.isValidMove,
+      required this.isWhite,
+      required this.piece,
+      required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
-    // Define the color for selected squares or normal squares
-    Color squareColor = isselcted
-        ? Colors.blue
-        : (isWhite ? Colors.grey[400]! : Colors.grey[600]!);
+    Color? squareColor;
 
+    if (isSelected) {
+      squareColor = Colors.green;
+    } else if (isValidMove) {
+      squareColor = Colors.green[300];
+    }
+// otherwise, it's white or black
+    else {
+      squareColor = isWhite ? backgroundColor : forgroundColor;
+    }
     return GestureDetector(
-      onTap: ontap,
+      onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width / 8, // Adjusts to screen size
-        height: MediaQuery.of(context).size.width / 8, // Maintain square ratio
-        color: squareColor, // Use the selected square color
+        color: squareColor,
         child: piece != null
             ? Image.asset(
-                piece!.imagepath,
-                color: piece!.iswhiter ? Colors.white : Colors.black,
+                piece!.imagePath,
+                color: piece!.isWhite ? null : Colors.black,
               )
-            : null, // If no piece, leave the square empty
+            : null,
       ),
     );
   }
